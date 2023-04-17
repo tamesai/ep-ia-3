@@ -55,6 +55,10 @@ def tempo_entre(origem, destino):
     for item in transporte:
         if (item['origem'] == origem and item['destino'] == destino):
             return item['tempo']
+def custo_entre(origem, destino):
+    for item in transporte:
+        if (item['origem'] == origem and item['destino'] == destino):
+            return item['custo']
 
 
 def obter_peso_roubo(cidade):
@@ -94,14 +98,17 @@ class Cidades(Individuo):
         peso = 0
         tempo = 0
         valor = 0
+        custo_transporte = 0
 
         for i in range(0, len(self.rota) - 2):
             tempo += tempo_entre(self.rota[i], self.rota[i + 1])
+            custo_transporte += custo_entre(self.rota[i], self.rota[i + 1])
         for i in range(1, len(self.rota) - 2):
             tempo += obter_tempo_roubo(self.rota[i])
             peso += obter_peso_roubo(self.rota[i])
             valor += obter_valor_roubo(self.rota[i])
-
+        valor -= custo_transporte
+        
         if tempo > TEMPO_MAXIMO or peso > PESO_MAXIMO:
             return -sys.maxsize - 1
 
